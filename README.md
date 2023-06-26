@@ -17,7 +17,6 @@ Featuring:
 Not really everything :(
 
 
-✘
 ## Lernziele
 
 ✔︎ - Verwendung von korrekten REST-Verben.
