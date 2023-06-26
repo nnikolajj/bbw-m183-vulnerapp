@@ -8,11 +8,9 @@ import io.micrometer.common.util.internal.logging.InternalLogger;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,9 +23,9 @@ public class UserController {
 	private final LoginService loginService;
 
 	@GetMapping("/whoami")
-	public UserEntity whoami(@AuthenticationPrincipal User user, HttpServletRequest request) {
+	public UserEntity whoami(@AuthenticationPrincipal String username, HttpServletRequest request) {
 		CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
 		LOGGER.info("{}={}", token.getHeaderName(), token.getToken());
-		return loginService.whoami(user.getUsername());
+		return loginService.whoami(username);
 	}
 }

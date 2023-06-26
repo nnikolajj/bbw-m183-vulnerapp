@@ -19,6 +19,6 @@ public class LoginService {
 
 	public UserEntity whoami(String username) {
 		return userRepository.findById(username)
-				.orElse(new UserEntity().setUsername("noel"));
+				.orElse(new UserEntity().setUsername("nikolaj"));
 	}
 }

@@ -8,6 +8,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +25,14 @@ public class AdminService {
 
     private final UserRepository userRepository;
 
+    @PreAuthorize("hasRole('ADMIN')")
     public UserEntity createUser(UserEntity newUser) {
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         log.info("new password {}", newUser.getPassword());
         return userRepository.save(newUser);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<UserEntity> getUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
     }

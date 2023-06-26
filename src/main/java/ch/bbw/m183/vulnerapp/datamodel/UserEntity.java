@@ -1,16 +1,19 @@
 package ch.bbw.m183.vulnerapp.datamodel;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import lombok.experimental.Accessors;
+
+import java.util.Collection;
+import java.util.List;
+
 
 @Getter
 @Setter
 @Accessors(chain = true)
+@ToString
+@RequiredArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class UserEntity {
@@ -24,4 +27,6 @@ public class UserEntity {
 	@Column
 	String password;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Role role;
 }

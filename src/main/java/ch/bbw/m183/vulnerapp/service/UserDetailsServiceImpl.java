@@ -1,20 +1,50 @@
 package ch.bbw.m183.vulnerapp.service;
 
+import ch.bbw.m183.vulnerapp.datamodel.Role;
+import ch.bbw.m183.vulnerapp.datamodel.UserEntity;
 import ch.bbw.m183.vulnerapp.repository.UserRepository;
+import ch.bbw.m183.vulnerapp.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-@Service
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 @RequiredArgsConstructor
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new UserDetailsImpl(repository.findByUsername(username));
+
+        Role role = getRoleByUsername(username);
+
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getName());
+        authorities.add(authority);
+
+        return userRepository.findById(username).map(userEntity ->
+                        new User(
+                                userEntity.getUsername(),
+                                userEntity.getPassword(),
+                                authorities)
+                )
+                .orElseThrow(() -> new UsernameNotFoundException(username + "not found"));
+    }
+
+    public Role getRoleByUsername(String username) throws UsernameNotFoundException {
+        UserEntity user = userRepository.findById(username).orElseThrow(() -> new UsernameNotFoundException(username + "not found"));
+        return userRoleRepository.findByUser(user).getRole();
     }
 }
