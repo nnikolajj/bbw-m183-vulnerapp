@@ -4,10 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.util.Collection;
-import java.util.List;
-
-
 @Getter
 @Setter
 @Accessors(chain = true)

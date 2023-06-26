@@ -1,6 +1,5 @@
 package ch.bbw.m183.vulnerapp.service;
 
-import ch.bbw.m183.vulnerapp.datamodel.UserEntity;
 import ch.bbw.m183.vulnerapp.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
